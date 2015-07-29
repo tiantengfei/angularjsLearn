@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Array as Data</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css"/>
+    <script type="text/javascript" src="lib/d3.js"></script>
+    <script type="text/javascript">
+       var start = new Date(2013,0,1);
+        var end = new Date(2013,11,31);
+
+        var data = [];
+
+        for(var i = 0; i < 12; i++){
+
+            var newDate = new Date(start.getTime());
+            newDate.setMonth(start.getMonth() + i);
+            data.push(newDate);
+        }
+
+       var range = [0, 1200];
+        var timescale = d3.time.scale().domain([start, end]).rangeRound(range);
+
+        function render(selector, data,scale){
+
+            var selection = d3.select(selector).select("div.fixed-cell").data(data);
+
+            selection.enter().append("div").classed("fixed-cell",true);
+
+            selection.style("margin-left", function(d){
+
+                return scale(d) + 'px';
+            }).html(function(d){
+                var format = d3.time.format("%x");
+
+                return format(d) + '<br> ' + scale(d) + "px";
+            });
+
+            selection.exit().remove();
+        }
+
+        render("#time",data,timescale);
+    </script>
+</head>
+
+
+<body>
+<div id="time" class="clear">
+    <span>Linear Time Progression<br></span>
+    <span>Mapping [01/01/2013, 12/31/2013] to [0, 900]<br></span>
+</div>
+</body>
+</html>

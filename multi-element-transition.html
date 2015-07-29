@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Array as Data</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css"/>
+    <script type="text/javascript" src="lib/d3.js"></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+    var duration = 1000;
+    var chartHeight = 500;
+
+    var id = 0;
+    var data = [];
+
+    for(var k = 0; k < 20; k++)
+        pushData();
+
+    function pushData(){
+        data.push({
+            id:++id,
+            value:Math.round(Math.random() * chartHeight)
+        });
+    }
+    function barLeft(i){
+
+        return i * (30 +2);
+    }
+
+    function barHeight(d){
+
+        return d.value;
+    }
+
+    function render(){
+
+        var selection = d3.select("body").selectAll("div.v-bar").data(data, function(d){
+
+            return d.id;
+        });
+
+        selection.enter().append("div").attr("class", "v-bar")
+                .style("position", "fixed")
+                .style("top", chartHeight + "px")
+                .style("left", function(d, i){
+                    return barLeft(i) + "px";
+                })
+                .style("height", "0px");
+
+
+        selection.transition().duration(duration)
+                .style("top", function(d){
+
+                    return (chartHeight -  barHeight(d)) + "px";
+                }).style("left", function(d,i){
+                    return barLeft(i) + "px";
+                }).style("height", function(d){
+                    return barHeight(d) + "px";
+                }).append("span").text(function(d){
+                    return d.value;
+                });
+
+
+        selection.exit().transition().duration(duration)
+                .style("left" , function(d, i){
+                    alert("hekk");
+                    return barLeft(-1) + "px";
+                }).remove();
+    }
+
+    setInterval(function(){
+
+        data.shift();
+        pushData();
+        render();
+
+    },1000);
+
+    render();
+    d3.select("body")
+            .append("div")
+            .attr("class", "baseline")
+            .style("position", "fixed")
+            .style("top", chartHeight + "px")
+            .style("left", "0px")
+            .style("width", 500 + "px");
+
+</script>
+
+</body>
+
+</html>

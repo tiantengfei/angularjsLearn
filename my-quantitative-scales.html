@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Array as Data</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css"/>
+    <script type="text/javascript" src="lib/d3.js"></script>
+    <script type="text/javascript">
+
+        var data = [1,2,3,4,5,6,7,8,9,10];
+
+        //for (var i = 1 ; i < 11; i++) {
+        //    data.push[i];
+       // }
+
+        var linear = d3.scale.linear().domain([1,10]).range([1,10]);
+        var linearScale = d3.scale.linear().domain([1,10]).range([1,20]);
+
+        function render(selector, data, scale){
+
+            var selection = d3.select(selector).selectAll("div.cell")
+                    .data(data);
+
+            selection.enter().append("div").classed("cell", true);
+
+            selection.style("display", "inline-block").text(function(d){
+
+                return d3.round(scale(d),2);
+            });
+
+            selection.exit().remove();
+        }
+
+
+        render("#linear",data, linear);
+        render("#linearScale",data,linearScale);
+
+
+
+    </script>
+</head>
+
+<body>
+
+<div id="linear" class="clear" ><span>n</span></div>
+<div id="linearScale" class="clear" ><span>a *n + b</span></div>
+</body>
+</html>

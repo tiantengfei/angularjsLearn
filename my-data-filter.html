@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Array as Data</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css"/>
+    <script type="text/javascript" src="lib/d3.js"></script>
+    <script type="text/javascript">
+
+        var data = [ // <-A
+            {expense: 10, category: "Retail"},
+            {expense: 15, category: "Gas"},
+            {expense: 30, category: "Retail"},
+            {expense: 50, category: "Dining"},
+            {expense: 80, category: "Gas"},
+            {expense: 65, category: "Retail"},
+            {expense: 55, category: "Gas"},
+            {expense: 30, category: "Dining"},
+            {expense: 20, category: "Retail"},
+            {expense: 10, category: "Dining"},
+            {expense: 8, category: "Gas"}
+        ];
+
+        function renderData(data, category){
+
+            var selection = d3.select("body").selectAll("div.h-bar").data(data);
+            selection.enter().append("div").attr("class", "h-bar").append("span");
+
+            selection.exit().remove();
+
+            selection.style("width", function(d){
+
+                return d.expense * 3 + 'px';
+            }).select("span").text(function(d, i){
+
+                return d.category;
+            });
+
+
+
+            selection.filter(function(d, i){
+                return d.category == category;
+            }).classed("selected",true);
+        }
+
+
+        render(data);
+        function selectCategory(category){
+            d3.select("body").selectAll("div.h-bar").classed("selected",false);
+            renderData(data,category);
+
+        }
+    </script>
+</head>
+
+
+<button onclick="selectCategory('Retail')">Retail </button>
+<button onclick="selectCategory('Gas')">Gas </button>
+<button onclick="selectCategory('Dining')">Dining </button>
+<button onclick="selectCategory()">clear </button>
+
+</div>
+
+</body>
+</html>
